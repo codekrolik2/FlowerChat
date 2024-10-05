@@ -39,11 +39,7 @@
                             <PropertyValueFactory property="username" />
                         </cellValueFactory>
                     </TableColumn>
-                    <TableColumn minWidth="500.0" prefWidth="500.0" text="Message">
-                        <cellValueFactory>
-                            <PropertyValueFactory property="message" />
-                        </cellValueFactory>
-                    </TableColumn>
+                    <TableColumn fx:id="messageColumn"  minWidth="500.0" prefWidth="500.0" text="Message" />
                 </columns>
             </TableView>
         </AnchorPane>
