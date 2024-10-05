@@ -1,0 +1,4 @@
+rootProject.name = 'vivochat'
+include 'ChatClient'
+include 'ChatCore'
+include 'ChatServer'
