@@ -13,8 +13,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -24,7 +22,14 @@ import java.util.prefs.Preferences;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class SignInDialog extends VBox {
-    final static Logger LOGGER = LoggerFactory.getLogger(SignInDialog.class);
+    final static String CHAT_USERNAME_PREF = "chatUsername";
+    final static String CHAT_SERVER_PREF = "chatServer";
+    final static String SAVE_CREDS_PREF = "chatSaveCreds";
+    final static String PKCS11_LIBRARY_PATH_PREF = "chatPkcs11LibraryPath";
+
+    final static String DEFAULT_CHAT_SERVER = "wss://127.0.0.1:8443/websocket";
+    final static String DEFAULT_PKCS11_LIBRARY_PATH = "/usr/lib/libeToken.so";
+    final static String FALSE = "False";
 
     AtomicBoolean multiSignInProtection = new AtomicBoolean(false);
 
@@ -55,15 +60,15 @@ public class SignInDialog extends VBox {
         {
             //Set login preferences
             Preferences userPreferences = Preferences.userRoot();
-            String username = userPreferences.get("chatUsername", "");
+            String username = userPreferences.get(CHAT_USERNAME_PREF, "");
             checkNotNull(usernameTextField).textProperty().set(username);
-            String server = userPreferences.get("chatServer", "");
-            checkNotNull(serverTextField).textProperty().set(StringUtils.isBlank(server) ? "ws://127.0.0.1:8080/websocket" : server);
-            String pkcs11LibraryPath = userPreferences.get("pkcs11LibraryPath", "/usr/lib/libeToken.so");
+            String server = userPreferences.get(CHAT_SERVER_PREF, "");
+            checkNotNull(serverTextField).textProperty().set(StringUtils.isBlank(server) ? DEFAULT_CHAT_SERVER : server);
+            String pkcs11LibraryPath = userPreferences.get(PKCS11_LIBRARY_PATH_PREF, DEFAULT_PKCS11_LIBRARY_PATH);
             checkNotNull(pkcs11LibraryPathTextField).textProperty().set(pkcs11LibraryPath);
             checkNotNull(pkcs11PinTextField).textProperty().set("");
 
-            String saveEmailStr = userPreferences.get("saveCreds", "False");
+            String saveEmailStr = userPreferences.get(SAVE_CREDS_PREF, FALSE);
             boolean saveCreds;
             try {
                 saveCreds = Boolean.parseBoolean(saveEmailStr);
@@ -133,22 +138,22 @@ public class SignInDialog extends VBox {
         } else {
             Preferences userPreferences = Preferences.userRoot();
             if (saveCreds) {
-                userPreferences.put("chatUsername", username);
-                userPreferences.put("chatServer", server);
-                userPreferences.put("saveCreds", "True");
-                userPreferences.put("pkcs11LibraryPath", pkcs11LibraryPath);
+                userPreferences.put(CHAT_USERNAME_PREF, username);
+                userPreferences.put(CHAT_SERVER_PREF, server);
+                userPreferences.put(SAVE_CREDS_PREF, "True");
+                userPreferences.put(PKCS11_LIBRARY_PATH_PREF, pkcs11LibraryPath);
             } else {
-                userPreferences.put("chatUsername", "");
-                userPreferences.put("chatServer", "");
-                userPreferences.put("saveCreds", "False");
-                userPreferences.put("pkcs11LibraryPath", "");
+                userPreferences.put(CHAT_USERNAME_PREF, "");
+                userPreferences.put(CHAT_SERVER_PREF, DEFAULT_CHAT_SERVER);
+                userPreferences.put(SAVE_CREDS_PREF, "False");
+                userPreferences.put(PKCS11_LIBRARY_PATH_PREF, DEFAULT_PKCS11_LIBRARY_PATH);
             }
 
             try {
                 HttpBase.initHttpClient(pkcs11LibraryPath, pkcs11Pin);
                 return true;
             } catch (Exception e) {
-                Alert alert = new Alert(Alert.AlertType.NONE, "PKCS#11 error: " + e.getMessage(), ButtonType.OK);
+                Alert alert = new Alert(Alert.AlertType.NONE, "HTTP client init error: " + e.getMessage(), ButtonType.OK);
                 alert.showAndWait();
                 return false;
             }
