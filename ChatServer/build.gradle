@@ -5,7 +5,7 @@ plugins {
 }
 
 application {
-    mainClass = 'com.vivo.chat.Main'
+    mainClass = 'com.flower.chat.Main'
 }
 
 compileJava {
@@ -76,7 +76,7 @@ tasks.withType(JavaCompile) {
         options.errorprone {
             check("NullAway", CheckSeverity.ERROR)
             excludedPaths.set("$buildDir/generated/sources/.*")
-            option("NullAway:AnnotatedPackages", "com.vivo.chat")
+            option("NullAway:AnnotatedPackages", "com.flower.chat")
         }
     } else {
         options.errorprone {
@@ -85,10 +85,10 @@ tasks.withType(JavaCompile) {
     }
 }
 
-shadowJar { manifest { attributes 'Main-Class': 'com.vivo.chat.Main' } }
+shadowJar { manifest { attributes 'Main-Class': 'com.flower.chat.Main' } }
 
 jar {
     manifest {
-        attributes 'Main-Class': 'com.vivo.chat.Main'
+        attributes 'Main-Class': 'com.flower.chat.Main'
     }
 }

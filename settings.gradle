@@ -1,4 +1,4 @@
-rootProject.name = 'vivochat'
+rootProject.name = 'FlowerChat'
 include 'ChatClient'
 include 'ChatCore'
 include 'ChatServer'

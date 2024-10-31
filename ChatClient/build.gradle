@@ -7,7 +7,7 @@ plugins {
     id "com.github.johnrengelman.shadow" version "7.1.2"
 }
 
-group 'com.vivo.chat'
+group 'com.flower.chat'
 version '0.0.1-SNAPSHOT-Intel'
 
 repositories {
@@ -33,8 +33,8 @@ tasks.withType(JavaCompile) {
 }
 
 application {
-    mainModule = 'com.vivo.chat'
-    mainClass = 'com.vivo.chat.ChatClientLauncher'
+    mainModule = 'com.flower.chat'
+    mainClass = 'com.flower.chat.ChatClientLauncher'
 }
 
 javafx {
@@ -113,7 +113,7 @@ test {
 jar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
-        attributes 'Main-Class': 'com.vivo.chat.ChatClientLauncher'
+        attributes 'Main-Class': 'com.flower.chat.ChatClientLauncher'
     }
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
@@ -130,7 +130,7 @@ tasks.withType(JavaCompile) {
             //Exclude Immutables generated code
             excludedPaths.set("$buildDir/generated/sources/.*")
             check("NullAway", CheckSeverity.ERROR)
-            option("NullAway:AnnotatedPackages", "com.vivo.chat")
+            option("NullAway:AnnotatedPackages", "com.flower.chat")
         }
     } else {
         options.errorprone {
