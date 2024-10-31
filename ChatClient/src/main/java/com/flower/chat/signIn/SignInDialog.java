@@ -1,5 +1,6 @@
 package com.flower.chat.signIn;
 
+import com.flower.chat.okhttp.HttpBase;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
@@ -30,11 +31,15 @@ public class SignInDialog extends VBox {
     @Nullable Stage stage;
     @Nullable @FXML public TextField serverTextField;
     @Nullable @FXML public TextField usernameTextField;
+    @Nullable @FXML public TextField pkcs11LibraryPathTextField;
+    @Nullable @FXML public TextField pkcs11PinTextField;
     @Nullable @FXML CheckBox rememberCheckBox;
     @Nullable @FXML Button signInButton;
 
     @Nullable String username;
     @Nullable String server;
+    @Nullable String pkcs11LibraryPath;
+    @Nullable String pkcs11Pin;
 
     public SignInDialog() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("SignInDialog.fxml"));
@@ -50,10 +55,13 @@ public class SignInDialog extends VBox {
         {
             //Set login preferences
             Preferences userPreferences = Preferences.userRoot();
-            String email = userPreferences.get("chatUsername", "");
-            checkNotNull(usernameTextField).textProperty().set(email);
+            String username = userPreferences.get("chatUsername", "");
+            checkNotNull(usernameTextField).textProperty().set(username);
             String server = userPreferences.get("chatServer", "");
             checkNotNull(serverTextField).textProperty().set(StringUtils.isBlank(server) ? "ws://127.0.0.1:8080/websocket" : server);
+            String pkcs11LibraryPath = userPreferences.get("pkcs11LibraryPath", "/usr/lib/libeToken.so");
+            checkNotNull(pkcs11LibraryPathTextField).textProperty().set(pkcs11LibraryPath);
+            checkNotNull(pkcs11PinTextField).textProperty().set("");
 
             String saveEmailStr = userPreferences.get("saveCreds", "False");
             boolean saveCreds;
@@ -106,6 +114,8 @@ public class SignInDialog extends VBox {
     public boolean signIn() {
         username = checkNotNull(usernameTextField).textProperty().get().trim();
         server = checkNotNull(serverTextField).textProperty().get();
+        pkcs11LibraryPath = checkNotNull(pkcs11LibraryPathTextField).textProperty().get();
+        pkcs11Pin = checkNotNull(pkcs11PinTextField).textProperty().get();
         boolean saveCreds = checkNotNull(rememberCheckBox).selectedProperty().get();
 
         if (StringUtils.isBlank(server)) {
@@ -116,18 +126,32 @@ public class SignInDialog extends VBox {
             Alert alert = new Alert(Alert.AlertType.NONE, "Username can't be blank", ButtonType.OK);
             alert.showAndWait();
             return false;
+        } else if (StringUtils.isBlank(pkcs11LibraryPath)) {
+            Alert alert = new Alert(Alert.AlertType.NONE, "PKCS#11 library path can't be blank", ButtonType.OK);
+            alert.showAndWait();
+            return false;
         } else {
             Preferences userPreferences = Preferences.userRoot();
             if (saveCreds) {
                 userPreferences.put("chatUsername", username);
                 userPreferences.put("chatServer", server);
                 userPreferences.put("saveCreds", "True");
+                userPreferences.put("pkcs11LibraryPath", pkcs11LibraryPath);
             } else {
                 userPreferences.put("chatUsername", "");
                 userPreferences.put("chatServer", "");
                 userPreferences.put("saveCreds", "False");
+                userPreferences.put("pkcs11LibraryPath", "");
             }
-            return true;
+
+            try {
+                HttpBase.initHttpClient(pkcs11LibraryPath, pkcs11Pin);
+                return true;
+            } catch (Exception e) {
+                Alert alert = new Alert(Alert.AlertType.NONE, "PKCS#11 error: " + e.getMessage(), ButtonType.OK);
+                alert.showAndWait();
+                return false;
+            }
         }
     }
 

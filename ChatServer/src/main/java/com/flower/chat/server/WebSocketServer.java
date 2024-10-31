@@ -29,8 +29,7 @@ import io.netty.handler.ssl.SslContext;
 
 public final class WebSocketServer {
     // No SSL by default
-    static final boolean SSL = System.getProperty("ssl") != null;
-    static final int PORT = Integer.parseInt(System.getProperty("port", SSL? "8443" : "8080"));
+    static final int PORT = Integer.parseInt(System.getProperty("port", "8443"));
     // Direct Pooled allocator by default
     public static final ByteBufAllocator ALLOCATOR = ByteBufAllocator.DEFAULT;
 
@@ -38,7 +37,7 @@ public final class WebSocketServer {
         ChatCache chatCache = new ChatCache();
 
         // Configure SSL.
-        final SslContext sslCtx = SSL ? ServerUtil.buildSslContext() : null;
+        final SslContext sslCtx = ServerUtil.buildSslContext();
 
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
@@ -53,7 +52,7 @@ public final class WebSocketServer {
             Channel ch = b.bind(PORT).sync().channel();
 
             System.out.println("Websocket server " +
-                    (SSL ? "wss" : "ws") + "://127.0.0.1:" + PORT + "/websocket");
+                    "wss" + "://127.0.0.1:" + PORT + "/websocket");
 
             ch.closeFuture().sync();
         } finally {

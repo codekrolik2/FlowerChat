@@ -22,3 +22,6 @@ gradle*
 generated
 *.log
 /ChatServer/build.gradle
+
+# Chat Server private key
+chat_server.key

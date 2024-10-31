@@ -20,10 +20,26 @@
     </HBox>
     <HBox maxHeight="37.0" minHeight="37.0" prefHeight="37.0">
         <AnchorPane prefHeight="200.0" prefWidth="160.0">
+            <Label layoutX="65.0" layoutY="12.0" text="pkcs#11 library path" AnchorPane.leftAnchor="10.0" />
+        </AnchorPane>
+        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+            <TextField fx:id="pkcs11LibraryPathTextField" layoutY="8.0" onKeyReleased="#formKeyRelease" AnchorPane.rightAnchor="10.0" />
+        </AnchorPane>
+    </HBox>
+    <HBox maxHeight="37.0" minHeight="37.0" prefHeight="37.0">
+        <AnchorPane prefHeight="200.0" prefWidth="160.0">
             <Label layoutX="65.0" layoutY="12.0" text="username" AnchorPane.leftAnchor="10.0" />
         </AnchorPane>
         <AnchorPane prefHeight="200.0" prefWidth="200.0">
             <TextField fx:id="usernameTextField" layoutY="8.0" onKeyReleased="#formKeyRelease" AnchorPane.rightAnchor="10.0" />
+        </AnchorPane>
+    </HBox>
+    <HBox maxHeight="37.0" minHeight="37.0" prefHeight="37.0">
+        <AnchorPane prefHeight="200.0" prefWidth="160.0">
+            <Label layoutX="65.0" layoutY="12.0" text="pin" AnchorPane.leftAnchor="10.0" />
+        </AnchorPane>
+        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+            <TextField fx:id="pkcs11PinTextField" layoutY="8.0" onKeyReleased="#formKeyRelease" AnchorPane.rightAnchor="10.0" />
         </AnchorPane>
     </HBox>
    <HBox maxHeight="27.0" minHeight="27.0" prefHeight="27.0">

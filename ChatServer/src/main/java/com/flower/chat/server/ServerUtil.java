@@ -15,31 +15,30 @@
  */
 package com.flower.chat.server;
 
+import com.flower.chat.trust.ChatTrust;
+import com.flower.utils.PkiUtil;
+import io.netty.handler.ssl.ClientAuth;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
-import io.netty.handler.ssl.util.SelfSignedCertificate;
 
-import javax.annotation.Nullable;
+import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLException;
-import java.security.cert.CertificateException;
 
 /**
  * Some useful methods for server side.
  */
 public final class ServerUtil {
-
-    private static final boolean SSL = System.getProperty("ssl") != null;
+    public static final KeyManagerFactory SERVER_KEY_MANAGER =
+            PkiUtil.getKeyManagerFromResources("chat_server.crt", "chat_server.key", "");
 
     private ServerUtil() {
     }
 
-    public static @Nullable SslContext buildSslContext() throws CertificateException, SSLException {
-        if (!SSL) {
-            return null;
-        }
-        SelfSignedCertificate ssc = new SelfSignedCertificate();
+    public static SslContext buildSslContext() throws SSLException {
         return SslContextBuilder
-                .forServer(ssc.certificate(), ssc.privateKey())
+                .forServer(SERVER_KEY_MANAGER)
+                .trustManager(ChatTrust.TRUST_MANAGER)
+                .clientAuth(ClientAuth.REQUIRE)
                 .build();
     }
 }

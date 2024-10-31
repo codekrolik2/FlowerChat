@@ -26,17 +26,15 @@ import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.codec.http.websocketx.extensions.compression.WebSocketServerCompressionHandler;
 import io.netty.handler.ssl.SslContext;
 
-import javax.annotation.Nullable;
-
 public class WebSocketServerInitializer extends ChannelInitializer<SocketChannel> {
 
     private static final String WEBSOCKET_PATH = "/websocket";
 
-    private final @Nullable SslContext sslCtx;
+    private final SslContext sslCtx;
     private final ChatCache chatCache;
     private final ByteBufAllocator allocator;
 
-    public WebSocketServerInitializer(@Nullable SslContext sslCtx, ChatCache chatCache, ByteBufAllocator allocator) {
+    public WebSocketServerInitializer(SslContext sslCtx, ChatCache chatCache, ByteBufAllocator allocator) {
         this.sslCtx = sslCtx;
         this.chatCache = chatCache;
         this.allocator = allocator;
@@ -45,9 +43,7 @@ public class WebSocketServerInitializer extends ChannelInitializer<SocketChannel
     @Override
     public void initChannel(SocketChannel ch) throws Exception {
         ChannelPipeline pipeline = ch.pipeline();
-        if (sslCtx != null) {
-            pipeline.addLast(sslCtx.newHandler(ch.alloc()));
-        }
+        pipeline.addLast(sslCtx.newHandler(ch.alloc()));
         pipeline.addLast(new HttpServerCodec());
         pipeline.addLast(new HttpObjectAggregator(10_500_000));
         pipeline.addLast(new WebSocketServerCompressionHandler());
