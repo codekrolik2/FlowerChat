@@ -11,3 +11,4 @@ To build jars, run:
 gradle shadowJar
 ```
 in folders `ChatClient`, `ChatServer`.
+
