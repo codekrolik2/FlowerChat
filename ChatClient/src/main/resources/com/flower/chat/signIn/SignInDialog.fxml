@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.PasswordField?>
 <fx:root prefHeight="110.0" prefWidth="280.0" type="VBox" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
     <HBox maxHeight="37.0" minHeight="37.0" prefHeight="37.0">
         <AnchorPane prefHeight="200.0" prefWidth="160.0">
@@ -39,7 +40,7 @@
             <Label layoutX="65.0" layoutY="12.0" text="pin" AnchorPane.leftAnchor="10.0" />
         </AnchorPane>
         <AnchorPane prefHeight="200.0" prefWidth="200.0">
-            <TextField fx:id="pkcs11PinTextField" layoutY="8.0" onKeyReleased="#formKeyRelease" AnchorPane.rightAnchor="10.0" />
+            <PasswordField fx:id="pkcs11PinTextField" layoutY="8.0" onKeyReleased="#formKeyRelease" AnchorPane.rightAnchor="10.0" />
         </AnchorPane>
     </HBox>
    <HBox maxHeight="27.0" minHeight="27.0" prefHeight="27.0">

@@ -7,6 +7,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -37,7 +38,7 @@ public class SignInDialog extends VBox {
     @Nullable @FXML public TextField serverTextField;
     @Nullable @FXML public TextField usernameTextField;
     @Nullable @FXML public TextField pkcs11LibraryPathTextField;
-    @Nullable @FXML public TextField pkcs11PinTextField;
+    @Nullable @FXML public PasswordField pkcs11PinTextField;
     @Nullable @FXML CheckBox rememberCheckBox;
     @Nullable @FXML Button signInButton;
 
