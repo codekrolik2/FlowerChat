@@ -36,7 +36,7 @@ public class HttpBase {
     public static OkHttpClient buildHttpClient(@Nullable Interceptor interceptor, String libraryPath, String pin) {
         try {
             KeyManagerFactory keyManagerFactory = PkiUtil.getKeyManagerFromPKCS11(libraryPath, pin);
-            TrustManagerFactory trustManagerFactory = ChatTrust.TRUST_MANAGER;
+            TrustManagerFactory trustManagerFactory = ChatTrust.TRUST_MANAGER_WITH_SERVER_CA;
 
             SSLContext sslContext = SSLContext.getInstance("TLS");
             sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(), null);

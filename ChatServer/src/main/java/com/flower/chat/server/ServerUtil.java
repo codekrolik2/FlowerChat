@@ -37,7 +37,7 @@ public final class ServerUtil {
     public static SslContext buildSslContext() throws SSLException {
         return SslContextBuilder
                 .forServer(SERVER_KEY_MANAGER)
-                .trustManager(ChatTrust.TRUST_MANAGER)
+                .trustManager(ChatTrust.TRUST_MANAGER_WITH_CLIENT_CA)
                 .clientAuth(ClientAuth.REQUIRE)
                 .build();
     }
